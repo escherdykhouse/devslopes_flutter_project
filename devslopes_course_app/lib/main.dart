@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'layout.dart';
 import 'secondScreen.dart';
 import 'thirdScreen.dart';
+import 'radcode.dart';
 
 void main() => runApp(FlutterApp());
 
@@ -17,6 +18,7 @@ class FlutterApp extends StatelessWidget {
       initialRoute: '/',
       routes: {
         '/pagethree': (context) => ThirdScreen(),
+        '/radcode': (context) => RadCodePage(),
       }
     );
   }
@@ -45,6 +47,12 @@ class HomePage extends StatelessWidget {
         ],
       ),
       body: LayoutView(),
+      persistentFooterButtons: <Widget>[FlatButton(
+        child: Text("RadCode"),
+        onPressed: () {
+          Navigator.of(context).pushNamed("/radcode");
+        },
+      )],
     );
   }
 }

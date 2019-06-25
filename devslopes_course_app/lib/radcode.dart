@@ -11,8 +11,9 @@ class _RadCodePageState extends State<RadCodePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("RadCode"),
+        title: Text("PuppyBook"),
       ),
+      backgroundColor: Colors.grey[300],
       body: PostsList(),
       drawer: Drawer(
         child: Container(

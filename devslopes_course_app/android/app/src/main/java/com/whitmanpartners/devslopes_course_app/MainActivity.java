@@ -1,5 +1,8 @@
 package com.whitmanpartners.devslopes_course_app;
 
+import android.content.Context;
+import android.net.wifi.WifiInfo;
+import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.util.Log;
 
@@ -19,21 +22,12 @@ import io.flutter.plugin.common.MethodChannel.Result;
 public class MainActivity extends FlutterActivity {
 
   public String getLocalIpAddress(){
-    try {
-      for (Enumeration<NetworkInterface> en = NetworkInterface.getNetworkInterfaces();
-           en.hasMoreElements();) {
-        NetworkInterface intf = en.nextElement();
-        for (Enumeration<InetAddress> enumIpAddr = intf.getInetAddresses(); enumIpAddr.hasMoreElements();) {
-          InetAddress inetAddress = enumIpAddr.nextElement();
-          if (!inetAddress.isLoopbackAddress()) {
-            return inetAddress.getHostAddress();
-          }
-        }
-      }
-    } catch (Exception ex) {
-      Log.e("IP Address", ex.toString());
-    }
-    return null;
+    Context context = this;
+    WifiManager wifiMan = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
+    WifiInfo wifiInf = wifiMan.getConnectionInfo();
+    int ipAddress = wifiInf.getIpAddress();
+    String ip = String.format("%d.%d.%d.%d", (ipAddress & 0xff),(ipAddress >> 8 & 0xff),(ipAddress >> 16 & 0xff),(ipAddress >> 24 & 0xff));
+    return ip;
   }
 
   private static final String CHANNEL = "pupbook.native/";

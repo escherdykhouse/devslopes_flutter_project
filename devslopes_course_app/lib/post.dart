@@ -2,12 +2,16 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
+const String fakeServer = "https://puppies.serveo.net/save";
+const String semiRealServer = "https://google.com";
+
 class RadPost {
   final String title;
   final String url;
   final String image;
   final String post;
   final List<String> tags;
+  var saved = false;
 
   RadPost(this.title, this.url, this.tags,this.image,this.post);
 
@@ -45,7 +49,7 @@ class RadPost {
 
   Future<bool> savePost() async {
     try {
-      var response = await http.post("https://puppies.serveo.net/save?name="+this.title.toLowerCase().replaceAll(" ", "_"));
+      var response = await http.post(semiRealServer+"?name="+this.title.toLowerCase().replaceAll(" ", "_"));
       if (response.statusCode == 200) {
         return true;
       } else {

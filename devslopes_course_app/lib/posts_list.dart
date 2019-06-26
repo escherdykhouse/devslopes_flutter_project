@@ -2,9 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:transparent_image/transparent_image.dart';
 import 'post.dart';
 
-class PostsList extends StatelessWidget {
+class PostsList extends StatefulWidget {
   PostsList() : super();
 
+  @override
+  _PostsListState createState() => _PostsListState();
+}
+
+class _PostsListState extends State<PostsList> {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<List<RadPost>>(
@@ -16,7 +21,8 @@ class PostsList extends StatelessWidget {
               itemBuilder: (BuildContext _context, int i) {
                 if (snapshot.data != null) {
                   if (i < snapshot.data.length) {
-                    return buildPostCard(snapshot.data[i]);
+                    var post = snapshot.data[i];
+                    return PostCard(post);
                   }
                 } else {
                   print("error occurred");
@@ -34,17 +40,21 @@ class PostsList extends StatelessWidget {
   }
 }
 
-/*
-  buildPostCard
-  | Use to create a card widget that displays data from a post
-  | shows the name and associated tags.
-  parameters
-  | post: a RadPost object to display a card for
-  returns
-  | Widget: a card widget to be used in a view
- */
-Widget buildPostCard(RadPost post) {
-  return Card(
+
+class PostCard extends StatefulWidget {
+
+  RadPost post;
+
+  PostCard(this.post);
+
+  @override
+  _PostCardState createState() => _PostCardState();
+}
+
+class _PostCardState extends State<PostCard> {
+  @override
+  Widget build(BuildContext context) {
+    return Card(
     child: Container(
       padding: EdgeInsets.only(top: 8, bottom: 8),
       child: Column(
@@ -58,11 +68,11 @@ Widget buildPostCard(RadPost post) {
                 Padding(
                   padding: const EdgeInsets.only(right: 8.0),
                   child: CircleAvatar(
-                    backgroundImage: NetworkImage(post.image),
+                    backgroundImage: NetworkImage(widget.post.image),
                   ),
                 ),
                 Text(
-                  post.title,
+                  widget.post.title,
                   style: TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
@@ -72,11 +82,14 @@ Widget buildPostCard(RadPost post) {
                     child: Container(
                   alignment: Alignment.centerRight,
                   child: IconButton(
-                    icon: Icon(Icons.bookmark_border),
+                    icon: Icon((widget.post.saved) ? Icons.bookmark : Icons.bookmark_border),
                     onPressed: () {
-                      post.savePost().then((bool success) {
+                      widget.post.savePost().then((bool success) {
                         print(success);
-                      });
+                         setState(() {
+                           widget.post.saved = success;
+                         });
+                       }); 
                     },
                   ),
                 ))
@@ -84,18 +97,20 @@ Widget buildPostCard(RadPost post) {
             ),
           ),
           FadeInImage.memoryNetwork(
-            image: post.post,
+            image: widget.post.post,
             placeholder: kTransparentImage,
           ),
           Padding(
             padding: const EdgeInsets.only(left: 16, right: 16, top: 8),
-            child: _buildCardTags(post.tags),
+            child: _buildCardTags(widget.post.tags),
           ),
         ],
       ),
     ),
   );
+  }
 }
+
 
 Widget _buildCardTags(List<String> tags) {
   List<Widget> chips = [];

@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
 const String fakeServer = "https://puppies.serveo.net/save";
-const String semiRealServer = "https://google.com";
+const String semiRealServer = "http://eschertalks.serveo.net/setDeviceToken";
 
 class RadPost {
   final String title;
